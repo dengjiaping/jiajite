@@ -1,5 +1,8 @@
 package com.project.jaijite;
 
+import com.project.service.MainService;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -15,6 +18,7 @@ public class MainActivity extends FragmentActivity
 	Fragment led_fragment,appliances_fragment,security_fragment,
 	car_fragment,setting_fragment;
 	private RadioGroup rg_main_btns = null;
+	private Intent service = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -31,6 +35,10 @@ public class MainActivity extends FragmentActivity
 		FragmentTransaction ft = fm.beginTransaction();
 		ft.add(R.id.container, led_fragment).commit();
 		initUI();
+		
+		//start server
+		service = new Intent(this, MainService.class);
+		startService(service);
 	}
 
 	private void initUI()
@@ -72,6 +80,13 @@ public class MainActivity extends FragmentActivity
 		});
 	}
 
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
+		stopService(service);
+	}
+	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
