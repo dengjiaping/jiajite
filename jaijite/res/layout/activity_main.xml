@@ -1,8 +1,75 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.project.jaijite.MainActivity"
-    tools:ignore="MergeRootFrame" />
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <RadioGroup
+            android:id="@+id/rg_main_btns"
+            android:layout_width="fill_parent"
+            android:layout_height="55dp"
+            android:layout_gravity="bottom"
+            android:background="@color/lightBlue"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/rd_led"
+                style="@style/main_btn_style"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:checked="true"
+                android:drawableTop="@drawable/home_led_tab_select"
+                android:text="照明" />
+
+            <RadioButton
+                android:id="@+id/rd_appliances"
+                style="@style/main_btn_style"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:drawableTop="@drawable/home_appliances_tab_select"
+                android:text="家电" />
+
+            <RadioButton
+                android:id="@+id/rd_security"
+                style="@style/main_btn_style"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:drawableTop="@drawable/home_security_tab_select"
+                android:text="安防" />
+
+            <RadioButton
+                android:id="@+id/rd_car"
+                style="@style/main_btn_style"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:drawableTop="@drawable/home_car_tab_select"
+                android:text="汽车" />
+
+            <RadioButton
+                android:id="@+id/rd_setting"
+                style="@style/main_btn_style"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:drawableTop="@drawable/home_setting_tab_select"
+                android:text="设置" />
+        </RadioGroup>
+    </FrameLayout>
+
+</LinearLayout>
