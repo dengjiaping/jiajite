@@ -1,5 +1,6 @@
 package com.project.jaijite;
 
+import com.project.bean.Task;
 import com.project.service.MainService;
 
 import android.content.Intent;
@@ -39,6 +40,8 @@ public class MainActivity extends FragmentActivity
 		//start server
 		service = new Intent(this, MainService.class);
 		startService(service);
+		Task task = new Task(this, "afdasfdas");
+		MainService.newTask(task);
 	}
 
 	private void initUI()

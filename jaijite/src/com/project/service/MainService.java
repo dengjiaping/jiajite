@@ -27,19 +27,6 @@ public class MainService extends Service implements Runnable
 	public void onCreate() 
 	{
 		super.onCreate();
-
-		try
-		{
-			client_socket=new Socket(Info.SERVER_ADDR, Info.PORT);
-		} catch (UnknownHostException e) 
-		{
-			e.printStackTrace();
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
-
 		isRun = true;
 		Thread thread = new Thread(this); // creater new thread
 		thread.start();
@@ -53,6 +40,17 @@ public class MainService extends Service implements Runnable
 	@Override
 	public void run()
 	{
+		try
+		{
+			client_socket=new Socket(Info.SERVER_ADDR, Info.PORT);
+		} catch (UnknownHostException e) 
+		{
+			e.printStackTrace();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
 		while (isRun)
 		{
 
@@ -108,7 +106,7 @@ public class MainService extends Service implements Runnable
 
 		catch (Exception ex)
 		{
-
+			System.out.println("error:"+ex.toString());
 		}
 	}
 
