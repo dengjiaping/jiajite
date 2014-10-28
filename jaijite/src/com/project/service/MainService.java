@@ -10,6 +10,7 @@ import java.util.Queue;
 
 import org.apache.http.util.ByteArrayBuffer;
 
+import android.R.integer;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -23,6 +24,7 @@ public class MainService extends Service implements Runnable
 	private static boolean isRun = false;
 	// Task Queue
 	private static Queue<Task> tasks = new LinkedList<Task>();
+	private static final int READ_TIME_OUT = 10;
 	@Override
 	public void onCreate() 
 	{
@@ -87,20 +89,25 @@ public class MainService extends Service implements Runnable
 			out=new PrintWriter(client_socket.getOutputStream());
 			out.println(command);
 			out.flush();
-
 			reader = client_socket.getInputStream();
 			byte[] buffer = new byte[256];
 			int lenght;
-			if (reader.available() != 0)
+			int read_counts = 0;
+			while (read_counts < READ_TIME_OUT) 
 			{
-				if ((lenght = reader.read(buffer)) != -1)
+				if (reader.available() != 0)
 				{
-					ByteArrayBuffer byteBuffer = new ByteArrayBuffer(lenght);
-					byteBuffer.append(buffer, 0, lenght);
-					byte[] data = byteBuffer.buffer();
-					resultStr = new String(data, "UTF-8");
-					System.out.println("send command resultStr====["+resultStr+"]");
+					if ((lenght = reader.read(buffer)) != -1)
+					{
+						ByteArrayBuffer byteBuffer = new ByteArrayBuffer(lenght);
+						byteBuffer.append(buffer, 0, lenght);
+						byte[] data = byteBuffer.buffer();
+						resultStr = new String(data, "UTF-8");
+						System.out.println("send command resultStr====["+resultStr+"]");
+					}
 				}
+				read_counts++;
+				Thread.sleep(1 * 1000);
 			}
 		}
 
