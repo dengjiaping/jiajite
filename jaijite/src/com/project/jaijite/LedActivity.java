@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -16,6 +18,7 @@ import com.project.bean.Task;
 import com.project.db.DataInfoDB;
 import com.project.jiajiteInterface.InterFace;
 import com.project.service.MainService;
+import com.shineeye.www.page.LedControlActivity;
 
 public class LedActivity extends BaseActivity implements InterFace
 {
@@ -50,6 +53,22 @@ public class LedActivity extends BaseActivity implements InterFace
 		
 		ledAdapter = new LedAdapter(this, lightInfos);
 		led_list_iew.setAdapter(ledAdapter);
+		
+		led_list_iew.setOnItemClickListener(new OnItemClickListener()
+		{
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+					long arg3) 
+			{
+				Intent intent = new Intent(LedActivity.this, LedControlActivity.class);
+				Bundle bundle=new Bundle();
+				bundle.putSerializable("lights", lightInfos.get(position));
+				intent.putExtras(bundle);
+				startActivityForResult(intent, 2);
+				
+			}
+		});
 	}
 
 	private class addBtnClick implements OnClickListener

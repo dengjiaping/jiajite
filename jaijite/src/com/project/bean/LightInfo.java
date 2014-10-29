@@ -1,6 +1,8 @@
 package com.project.bean;
 
-public class LightInfo 
+import java.io.Serializable;
+
+public class LightInfo implements Serializable
 {
 	private int id;
 	private String name;

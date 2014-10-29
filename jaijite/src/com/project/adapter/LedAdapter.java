@@ -93,8 +93,6 @@ public class LedAdapter extends BaseAdapter
 		{
 			holder.ledPowerBtn.setImageResource(R.drawable.led_offed);
 		}
-		//holder.detailslayout.setOnClickListener(detailslayoutListener);
-		//holder.detailslayout.setOnLongClickListener(this);
 		return contentView;
 	}
 
