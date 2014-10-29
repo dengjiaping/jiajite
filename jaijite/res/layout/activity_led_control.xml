@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:background="@color/lightBlue" >
+
+        <Button
+            android:id="@+id/back_btn"
+            android:layout_width="100dp"
+            android:layout_height="fill_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@color/transparent"
+            android:drawableLeft="@drawable/arrow_left_small"
+            android:paddingLeft="10dp"
+            android:text="LED灯"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/title_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="添加LED灯"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <FrameLayout
+            android:id="@+id/add_btn"
+            android:layout_width="50dip"
+            android:layout_height="45dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" >
+
+            <ImageView
+                android:layout_width="20dip"
+                android:layout_height="20dip"
+                android:layout_gravity="center"
+                android:background="@drawable/btn_add" />
+        </FrameLayout>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <!-- 开关、小夜灯 -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/shape"
+                android:orientation="horizontal"
+                android:padding="1dp" >
+
+                <TextView
+                    android:id="@+id/led_turn_btn"
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1.0"
+                    android:background="@color/transparent"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:text="@string/ledPower"
+                    android:textColor="@drawable/led_text_selector"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/night_line_btn"
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1.0"
+                    android:background="@color/transparent"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:text="@string/ledNightlight"
+                    android:textColor="@drawable/led_text_selector" />
+            </LinearLayout>
+
+            <!-- 分组选择 -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/shape"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/group1Tv"
+                    style="@style/ledTextStyle"
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1.0"
+                    android:text="@string/ledGroup1" />
+
+                <TextView
+                    android:id="@+id/group2Tv"
+                    style="@style/ledTextStyle"
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1.0"
+                    android:text="@string/ledGroup2" />
+
+                <TextView
+                    android:id="@+id/group3Tv"
+                    style="@style/ledTextStyle"
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1.0"
+                    android:text="@string/ledGroup3" />
+
+                <TextView
+                    android:id="@+id/group4Tv"
+                    style="@style/ledTextStyle"
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1.0"
+                    android:text="@string/ledGroup4" />
+            </LinearLayout>
+            <!-- 亮度 -->
+
+            <TextView
+                android:id="@+id/brightnessTv"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/brightness" />
+
+            <SeekBar
+                android:id="@+id/sblight"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:max="100"
+                android:visibility="gone" />
+
+            <!-- 色温 -->
+
+            <TextView
+                android:id="@+id/colorTempTv"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/color_temp" />
+
+            <!-- 延时关灯 -->
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/shape" >
+
+                <TextView
+                    android:id="@+id/delayCloseTv"
+                    style="@style/ledTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:gravity="left|center_vertical"
+                    android:paddingLeft="15dip"
+                    android:text="延时关灯：30分钟" />
+
+                <FrameLayout
+                    android:id="@+id/delaySet"
+                    android:layout_width="50dp"
+                    android:layout_height="fill_parent"
+                    android:layout_alignParentRight="true" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/arrow_right_small" />
+                </FrameLayout>
+            </RelativeLayout>
+
+            <!-- 定时开灯 -->
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/shape" >
+
+                <TextView
+                    android:id="@+id/timingOpenTv"
+                    style="@style/ledTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:gravity="left|center_vertical"
+                    android:paddingLeft="15dip"
+                    android:text="定时开灯：18:30" />
+
+                <FrameLayout
+                    android:id="@+id/timingopenset"
+                    android:layout_width="50dp"
+                    android:layout_height="fill_parent"
+                    android:layout_alignParentRight="true" >
+
+                    <TextView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/arrow_right_small" />
+                </FrameLayout>
+            </RelativeLayout>
+            <!-- 定时关灯 -->
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/shape" >
+
+                <TextView
+                    android:id="@+id/timingCloseTv"
+                    style="@style/ledTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:gravity="left|center_vertical"
+                    android:paddingLeft="15dip"
+                    android:text="定时关灯：18:30" />
+
+                <FrameLayout
+                    android:id="@+id/timingcloseset"
+                    android:layout_width="50dp"
+                    android:layout_height="fill_parent"
+                    android:layout_alignParentRight="true" >
+
+                    <TextView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/arrow_right_small" />
+                </FrameLayout>
+            </RelativeLayout>
+
+            <!-- 闪烁模式 -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/shape"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/falsh1Tv"
+                    style="@style/ledTextStyle"
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1.0"
+                    android:text="@string/falsh1" />
+
+                <TextView
+                    android:id="@+id/falsh2Tv"
+                    style="@style/ledTextStyle"
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1.0"
+                    android:text="@string/falsh2" />
+
+                <TextView
+                    android:id="@+id/falsh3Tv"
+                    style="@style/ledTextStyle"
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1.0"
+                    android:text="@string/falsh3" />
+
+                <TextView
+                    android:id="@+id/falsh4Tv"
+                    style="@style/ledTextStyle"
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1.0"
+                    android:text="@string/falsh4" />
+
+                <TextView
+                    android:id="@+id/falsh5Tv"
+                    style="@style/ledTextStyle"
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1.0"
+                    android:text="@string/falsh5" />
+
+                <TextView
+                    android:id="@+id/falsh6Tv"
+                    style="@style/ledTextStyle"
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1.0"
+                    android:text="@string/falsh6" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

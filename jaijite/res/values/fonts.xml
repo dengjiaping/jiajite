@@ -10,4 +10,12 @@
         <item name="android:textSize">22sp</item>
     </style>
 
+    <style name="ledTextStyle">
+        <item name="android:textColor">@drawable/led_text_selector</item>
+        <item name="android:clickable">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:background">@color/transparent</item>
+    </style>
+
 </resources>
