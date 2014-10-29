@@ -25,6 +25,8 @@ public class MainService extends Service implements Runnable
 	// Task Queue
 	private static Queue<Task> tasks = new LinkedList<Task>();
 	private static final int READ_TIME_OUT = 10;
+
+	String task_result = "";
 	@Override
 	public void onCreate() 
 	{
@@ -57,14 +59,33 @@ public class MainService extends Service implements Runnable
 		{
 
 			Task task = null;
-
+			int try_count = 0;
 			if (!tasks.isEmpty())
 			{
 				task = tasks.poll();// The change removes the task from the task
 				// queue after executing tasks
 				if (null != task)
 				{
-					doTask(task);
+					//连接3次
+					while (try_count < 3) 
+					{
+						try_count++;
+						task_result = doTask(task);
+						if (!task_result.equals("")) 
+						{
+							// 更新ui
+							System.out.println("=====go to update ui======");
+							try_count = 0;
+							break;
+						}
+					}
+					if (try_count >= 3) 
+					{
+						//重连3次失败
+						try_count = 0;
+						System.out.println("=====connect fail======");
+					}
+					
 				}
 			}
 			try
@@ -78,7 +99,7 @@ public class MainService extends Service implements Runnable
 		}
 	}
 
-	private synchronized void doTask(Task task)
+	private synchronized String doTask(Task task)
 	{
 		String command= task.getCommand();
 		PrintWriter out=null;
@@ -106,6 +127,10 @@ public class MainService extends Service implements Runnable
 						System.out.println("send command resultStr====["+resultStr+"]");
 					}
 				}
+				if (!resultStr.equals("")) 
+				{
+					return resultStr;
+				}
 				read_counts++;
 				Thread.sleep(1 * 1000);
 			}
@@ -114,7 +139,9 @@ public class MainService extends Service implements Runnable
 		catch (Exception ex)
 		{
 			System.out.println("error:"+ex.toString());
+			return "";
 		}
+		return "";
 	}
 
 

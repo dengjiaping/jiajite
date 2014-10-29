@@ -28,7 +28,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
+        <activity
+            android:name=".LedActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AppliancesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CarActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SecurityActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SettingActivity"
+            android:screenOrientation="portrait" />
+
         <service android:name="com.project.service.MainService" />
     </application>
 

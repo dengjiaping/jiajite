@@ -1,40 +1,30 @@
 package com.project.jaijite;
 
-import com.project.bean.Task;
-import com.project.service.MainService;
-
+import android.app.ActivityGroup;
+import android.app.LocalActivityManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
-public class MainActivity extends FragmentActivity 
+import com.project.bean.Task;
+import com.project.service.MainService;
+
+public class MainActivity extends ActivityGroup 
 {
-	private FragmentManager fm ;
-	Fragment led_fragment,appliances_fragment,security_fragment,
-	car_fragment,setting_fragment;
 	private RadioGroup rg_main_btns = null;
 	private Intent service = null;
+	private static LocalActivityManager manager;
+	private static FrameLayout container;
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		fm = getSupportFragmentManager();
-
-		led_fragment = new LedFragment();
-		appliances_fragment = new AppliancesFragment();
-		security_fragment = new SecurityFragment();
-		car_fragment = new CarFragment();
-		setting_fragment = new SettingFragment();
-		FragmentTransaction ft = fm.beginTransaction();
-		ft.add(R.id.container, led_fragment).commit();
 		initUI();
 		
 		//start server
@@ -42,10 +32,15 @@ public class MainActivity extends FragmentActivity
 		startService(service);
 		Task task = new Task(this, "afdasfdas");
 		MainService.newTask(task);
+		showPage(LedActivity.class); 
 	}
 
+	@SuppressWarnings("deprecation")
 	private void initUI()
 	{
+		manager = getLocalActivityManager();
+		container = (FrameLayout) findViewById(R.id.container);
+		
 		rg_main_btns =  (RadioGroup) findViewById(R.id.rg_main_btns);
 		rg_main_btns.setOnCheckedChangeListener(new OnCheckedChangeListener() 
 		{
@@ -53,27 +48,21 @@ public class MainActivity extends FragmentActivity
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId)
 			{
-				FragmentTransaction ft = fm.beginTransaction();
 				switch (checkedId) {
 				case R.id.rd_led:
-					ft.replace(R.id.container,led_fragment );
-					ft.commit();
+					showPage(LedActivity.class); 
 					break;
 				case R.id.rd_appliances:
-					ft.replace(R.id.container,appliances_fragment );
-					ft.commit();
+					showPage(AppliancesActivity.class); 
 					break;
 				case R.id.rd_security:
-					ft.replace(R.id.container,security_fragment );
-					ft.commit();
+					showPage(SecurityActivity.class); 
 					break;
 				case R.id.rd_car:
-					ft.replace(R.id.container,car_fragment );
-					ft.commit();
+					showPage(CarActivity.class); 
 					break;
 				case R.id.rd_setting:
-					ft.replace(R.id.container,setting_fragment );
-					ft.commit();
+					showPage(SettingActivity.class); 
 					break;
 
 				default:
@@ -83,6 +72,18 @@ public class MainActivity extends FragmentActivity
 		});
 	}
 
+	@SuppressWarnings("deprecation")
+	public void showPage(Class<?> cls)
+	{
+		container.removeAllViews();
+		manager.removeAllActivities();
+		System.gc(); 
+		// add page
+		View view = manager.startActivity(cls.getName(), new Intent(this, cls)
+		.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)).getDecorView();
+		container.addView(view);
+	}
+	
 	@Override
 	protected void onDestroy()
 	{
