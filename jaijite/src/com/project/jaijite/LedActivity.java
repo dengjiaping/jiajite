@@ -61,7 +61,7 @@ public class LedActivity extends BaseActivity implements InterFace
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
 					long arg3) 
 			{
-				Intent intent = new Intent(LedActivity.this, LedControlActivity.class);
+				//Intent intent = new Intent(LedActivity.this, LedControlActivity.class);
 				Bundle bundle=new Bundle();
 				bundle.putSerializable("lights", lightInfos.get(position));
 				intent.putExtras(bundle);
