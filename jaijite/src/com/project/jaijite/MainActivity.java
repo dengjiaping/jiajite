@@ -28,12 +28,11 @@ public class MainActivity extends ActivityGroup
 		setContentView(R.layout.activity_main);
 
 		initUI();
-		
-		ifFirstEnter();
-		
 		//start server
 		service = new Intent(this, MainService.class);
 		startService(service);
+		
+		ifFirstEnter();
 		showPage(LedActivity.class); 
 	}
 
@@ -43,11 +42,17 @@ public class MainActivity extends ActivityGroup
     	if (isFirstEnter.equals(""))
 		{
     		DataInfoDB dataInfo = new DataInfoDB(this);
-    		dataInfo.Add("大厅灯");
-    		dataInfo.Add("厕所灯");
-    		dataInfo.Add("餐厅灯");
-    		dataInfo.Add("卧室灯");
-    		dataInfo.Add("厨房灯");
+    		if (dataInfo.getAllLights() == null) 
+    		{
+    			dataInfo.Add("大厅灯");
+        		dataInfo.Add("厕所灯");
+        		dataInfo.Add("餐厅灯");
+        		dataInfo.Add("卧室灯");
+        		dataInfo.Add("厨房灯");
+			}
+    		
+    		Intent intent = new Intent(MainActivity.this, MacSettingActivity.class);
+    		MainActivity.this.startActivity(intent);
 		}
     }
 	

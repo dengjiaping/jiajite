@@ -19,7 +19,7 @@ public class DataInfoDB  extends SQLiteOpenHelper
 	
 	private String LIGHTS = "CREATE TABLE IF NOT EXISTS  LIGHTS "+
 							"(ID integer primary key ,NAME varchar(50),LIGHTLEVEL integer,CORLORTEMP integer,"
-							+ "TIMEON varchar(50),TOMEOFF varchar(50),DELAY varchar(50),JUMP integer,"
+							+ "TIMEON varchar(50) ,TOMEOFF varchar(50),DELAY varchar(50),JUMP integer,"
 							+"WATER integer, TOUCH integer, GFLIASH integer, BFLASH integer, WARMING integer,"
 							+"LEDSTATE integer,NIGHTLAMPSTATE integer)";
 	

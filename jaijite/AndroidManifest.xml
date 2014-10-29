@@ -47,6 +47,20 @@
         <activity
             android:name=".LedEditActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".MacSettingActivity"
+            android:screenOrientation="portrait" />
+        
+        <activity
+            android:name=".PasswordSettingActivity"
+            android:screenOrientation="portrait" />
+         <activity
+            android:name=".ManualActivity"
+            android:screenOrientation="portrait" />
+          <activity
+            android:name=".AboutUsActivity"
+            android:screenOrientation="portrait" />
+        
 
         <service android:name="com.project.service.MainService" />
     </application>

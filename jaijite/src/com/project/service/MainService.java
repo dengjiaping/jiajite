@@ -51,7 +51,8 @@ public class MainService extends Service implements Runnable
 		try
 		{
 			client_socket=new Socket(Info.SERVER_ADDR, Info.PORT);
-		} catch (UnknownHostException e) 
+		} 
+		catch (UnknownHostException e) 
 		{
 			e.printStackTrace();
 		} 
