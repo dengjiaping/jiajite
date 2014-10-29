@@ -1,0 +1,13 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="ledmainTextStyle">
+        <item name="android:textColor">@color/ledmaincontent</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="titleTextStyle">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+
+</resources>

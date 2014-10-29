@@ -16,6 +16,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 
 import com.project.bean.Info;
 import com.project.bean.Task;
@@ -30,7 +31,6 @@ public class MainService extends Service implements Runnable
 	private static final int READ_TIME_OUT = 10;
 	private static ArrayList<Activity> appActivities = new ArrayList<Activity>();
 	String task_result = "";
-	private static final int UPDATE_UI = 1000;
 	@Override
 	public void onCreate() 
 	{
@@ -79,7 +79,9 @@ public class MainService extends Service implements Runnable
 						{
 							// 更新ui
 							try_count = 0;
-							handler.sendEmptyMessage(UPDATE_UI);
+							Message msg = new Message();
+							msg.obj = task;
+							handler.sendMessage(msg);
 							break;
 						}
 					}
@@ -111,7 +113,7 @@ public class MainService extends Service implements Runnable
 			InterFace activity = null;
 			activity = (InterFace) getActivityByName("LedActivity");
 			if (activity != null)
-				activity.refresh();
+				activity.refresh(msg.obj);
 		}
 	};
 	

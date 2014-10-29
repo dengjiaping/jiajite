@@ -10,9 +10,11 @@ import android.widget.FrameLayout;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
-import com.project.bean.Task;
+import com.project.db.DataInfoDB;
 import com.project.service.MainService;
+import com.project.util.PreferencesBase;
 
+@SuppressWarnings("deprecation")
 public class MainActivity extends ActivityGroup 
 {
 	private RadioGroup rg_main_btns = null;
@@ -27,14 +29,28 @@ public class MainActivity extends ActivityGroup
 
 		initUI();
 		
+		ifFirstEnter();
+		
 		//start server
 		service = new Intent(this, MainService.class);
 		startService(service);
-		Task task = new Task(this, "afdasfdas");
-		MainService.newTask(task);
 		showPage(LedActivity.class); 
 	}
 
+	private void ifFirstEnter()
+    {
+    	String isFirstEnter = PreferencesBase.getStringByTargetKey(PreferencesBase.isFirsEnter);
+    	if (isFirstEnter.equals(""))
+		{
+    		DataInfoDB dataInfo = new DataInfoDB(this);
+    		dataInfo.Add("大厅灯");
+    		dataInfo.Add("厕所灯");
+    		dataInfo.Add("餐厅灯");
+    		dataInfo.Add("卧室灯");
+    		dataInfo.Add("厨房灯");
+		}
+    }
+	
 	@SuppressWarnings("deprecation")
 	private void initUI()
 	{

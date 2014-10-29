@@ -1,35 +1,96 @@
 package com.project.bean;
 
-import java.util.Map;
-
-import android.content.Context;
 
 public class Task
 {
 	
 	private String command;
-	private Context context = null;
+	private int id;
+	private String head = "LED:";
+	private String mac = "E005C54DF500";
+	private int function;
+	private int attribute;
 	
-	public Task(Context ctx, String command)
+	private String new_paswd;
+	private String old_paswd;
+	
+	public Task()
 	{
-		super();
-		this.command = command;
-		this.context = ctx;
+
+	}
+	
+	public String getNew_paswd() {
+		return new_paswd;
 	}
 
-	public String getCommand() {
+	public void setNew_paswd(String new_paswd) {
+		this.new_paswd = new_paswd;
+	}
+
+	public String getOld_paswd() {
+		return old_paswd;
+	}
+
+	public void setOld_paswd(String old_paswd) {
+		this.old_paswd = old_paswd;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	
+	
+	public String getMac() {
+		return mac;
+	}
+
+	public void setMac(String mac) {
+		this.mac = mac;
+	}
+	
+	public String getHead() {
+		return head;
+	}
+
+	public void sethead(String head) {
+		this.head = head;
+	}
+	
+	public int getFunction() {
+		return function;
+	}
+
+	public void setFunction(int function) {
+		this.function = function;
+	}
+
+	public int getAttribute() {
+		return attribute;
+	}
+
+	public void setAttribute(int attribute) {
+		this.attribute = attribute;
+	}
+
+	public String getCommand() 
+	{
+		if (head.equals("LED:")) 
+		{
+			command = head + mac + ","+ id+","+ function+","+ attribute;
+		}
+		else 
+		{
+			command = head + old_paswd +"," + new_paswd;
+		}
+		
 		return command;
 	}
 
-	public void setCommand(String command) {
-		this.command = command;
-	}
+	
 
-	public Context getContext() {
-		return context;
-	}
-
-	public void setContext(Context context) {
-		this.context = context;
-	}
 }
