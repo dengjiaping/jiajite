@@ -1,17 +1,18 @@
 package com.project.jaijite;
 
-import android.app.Activity;
 import android.os.Bundle;
 
 import com.project.jiajiteInterface.InterFace;
+import com.project.service.MainService;
 
-public class SettingActivity  extends Activity implements InterFace
+public class SettingActivity  extends BaseActivity implements InterFace
 {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.setting_fragment);
+		MainService.addActivity(this);
 	}
 	@Override
 	public void init() {
@@ -23,6 +24,13 @@ public class SettingActivity  extends Activity implements InterFace
 	public void refresh(Object... params) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	protected void onDestroy()
+	{
+		MainService.removeActivity(this);
+		super.onDestroy();
 	}
 }
 

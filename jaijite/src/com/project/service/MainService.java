@@ -5,18 +5,21 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
 import org.apache.http.util.ByteArrayBuffer;
 
-import android.R.integer;
+import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
 
 import com.project.bean.Info;
 import com.project.bean.Task;
+import com.project.jiajiteInterface.InterFace;
 
 public class MainService extends Service implements Runnable
 {
@@ -25,8 +28,9 @@ public class MainService extends Service implements Runnable
 	// Task Queue
 	private static Queue<Task> tasks = new LinkedList<Task>();
 	private static final int READ_TIME_OUT = 10;
-
+	private static ArrayList<Activity> appActivities = new ArrayList<Activity>();
 	String task_result = "";
+	private static final int UPDATE_UI = 1000;
 	@Override
 	public void onCreate() 
 	{
@@ -74,8 +78,8 @@ public class MainService extends Service implements Runnable
 						if (!task_result.equals("")) 
 						{
 							// 更新ui
-							System.out.println("=====go to update ui======");
 							try_count = 0;
+							handler.sendEmptyMessage(UPDATE_UI);
 							break;
 						}
 					}
@@ -99,6 +103,39 @@ public class MainService extends Service implements Runnable
 		}
 	}
 
+	
+	Handler handler = new Handler()
+	{
+		public void handleMessage(android.os.Message msg)
+		{
+			InterFace activity = null;
+			activity = (InterFace) getActivityByName("LedActivity");
+			if (activity != null)
+				activity.refresh();
+		}
+	};
+	
+	public static Activity getActivityByName(String name)
+	{
+
+		if (!appActivities.isEmpty())
+		{
+			for (Activity activity : appActivities)
+			{
+				if (null != activity)
+				{
+					if (activity.getClass().getName().indexOf(name) > 0)
+					{
+						return activity;
+					}
+				}
+			}
+		}
+
+		return null;
+
+	}
+	
 	private synchronized String doTask(Task task)
 	{
 		String command= task.getCommand();
@@ -143,13 +180,26 @@ public class MainService extends Service implements Runnable
 		}
 		return "";
 	}
+	
 
+	public static void addActivity(Activity activity)
+	{
+		appActivities.add(activity);
 
+	}
+	
+	public static void removeActivity(Activity activity)
+	{
+		appActivities.remove(activity);
+
+	}
+	
 	@Override
 	public IBinder onBind(Intent arg0)
 	{
 		return null;
 	}
+	
 	@Override
 	public void onDestroy()
 	{
