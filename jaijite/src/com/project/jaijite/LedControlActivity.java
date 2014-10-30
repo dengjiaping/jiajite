@@ -4,14 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -48,6 +54,10 @@ OnClickListener, OnTouchListener
 	private DataInfoDB dataDb = null;
 	private LightInfo lightInfo = null;
 	List<View> ledgroups = new ArrayList<View>();
+	private int popy = 0;
+	TextView popTextView;
+	private PopupWindow popupWindow;
+	int ctv, ttv, tv;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
@@ -82,8 +92,10 @@ OnClickListener, OnTouchListener
 		led_turn_btn = (TextView) findViewById(R.id.led_turn_btn);
 		led_turn_btn.setOnClickListener(this);
 		brightnessTv = (TextView) findViewById(R.id.brightnessTv);
+		brightnessTv.setOnTouchListener(this);
 		sblight = (SeekBar) findViewById(R.id.sblight);
 		colorTempTv = (TextView) findViewById(R.id.colorTempTv);
+		colorTempTv.setOnTouchListener(this);
 		delayCloseTv = (TextView) findViewById(R.id.delayCloseTv);
 		delaySet = (FrameLayout) findViewById(R.id.delaySet);
 		delaySet.setOnClickListener(this);
@@ -113,6 +125,12 @@ OnClickListener, OnTouchListener
 		group3Tv.setOnClickListener(this);
 		group4Tv = (TextView) findViewById(R.id.group4Tv);
 		group4Tv.setOnClickListener(this);
+		
+		popTextView = (TextView) LayoutInflater.from(this).inflate(
+				R.layout.pop_window_led_control, null);
+		popupWindow = new PopupWindow(popTextView,
+				ViewGroup.LayoutParams.WRAP_CONTENT,
+				ViewGroup.LayoutParams.WRAP_CONTENT, true);
 	}
 
 
@@ -225,12 +243,103 @@ OnClickListener, OnTouchListener
 	}
 
 	@Override
-	public boolean onTouch(View arg0, MotionEvent arg1)
+	public boolean onTouch(View view, MotionEvent event)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		float x = event.getX();
+		float y = event.getY();
+		int action = event.getAction();
+
+		if (action == MotionEvent.ACTION_DOWN) 
+		{
+			if (view.getId() == R.id.brightnessTv)
+			{
+				
+				showPopWindow(brightnessTv, "0", (int) x);
+
+			} 
+			else if (view.getId() == R.id.colorTempTv)
+				showPopWindow(colorTempTv, "0", (int) x);
+
+		} 
+		else if (action == MotionEvent.ACTION_MOVE) 
+		{
+			if (view.getId() == R.id.brightnessTv)
+			{
+				tv = ((int) (x / brightnessTv.getWidth() * 100));
+				popTextView.setText(tv + "%");
+				popupWindow.update((int) x, popy, -1, -1, true);
+				System.out.println(Math.abs(tv - ctv));
+				if (Math.abs(tv - ctv) > 0) 
+				{
+					ctv = tv;
+					System.out.println("=============="+tv);
+					//SocketMsg sm=new SocketMsg();
+					//sm.sendMsg("LED:E005C54DF500,123456,5," + tv,lcaHandler,0,R.id.brightnessTv);
+				}
+
+			} 
+			else if (view.getId() == R.id.colorTempTv) 
+			{
+				tv = (3000 + ((int) (x / colorTempTv.getWidth() * 5000)));
+				popTextView.setText(tv + "k");
+
+				popupWindow.update((int) x, popy, -1, -1, true);
+				if (Math.abs(tv - ctv) > 50) 
+				{
+					ctv = tv;
+					System.out.println("************"+Math.round(tv));
+					//SocketMsg sm=new SocketMsg();
+					//sm.sendMsg("LED:E005C54DF500,123456,9," + tv,lcaHandler,0,R.id.colorTempTv);
+
+				}
+			}
+
+		} 
+		else if (action == MotionEvent.ACTION_UP)
+		{
+			popupWindow.dismiss();
+			System.out.println("xxxxxxxxxxxx" + tv);
+			if (view.getId() == R.id.brightnessTv)
+			{
+				//ls.Update("LIGHTLEVEL=? ", new Object[] { tv, light.getId() });
+
+			} else if (view.getId() == R.id.colorTempTv) {
+
+				//ls.Update("CORLORTEMP=? ", new Object[] { tv, light.getId() });
+			} 
+			/*else if (view.getId() == R.id.colorSeletorIv) 
+			{
+				y = event.getY();
+				ImageView img = (ImageView) view;
+				img.setDrawingCacheEnabled(true);
+				Bitmap b = img.getDrawingCache();
+				int color = b.getPixel((int) x, (int) y);
+				setColor(color);
+			}*/
+		}
+		return true;
 	}
 
+	private void showPopWindow(View parent, String str, int x) 
+	{
+		System.out.println(popy);
+		popTextView.setText(str);
+		int[] plocation = new int[2];
+		parent.getLocationOnScreen(plocation);
+		popy = plocation[1] - parent.getHeight();
+		popupWindow.showAtLocation(parent, Gravity.NO_GRAVITY, x, popy);
+	}
+	
+	private void setColor(int color) {
+		int r = Color.red(color);
+		int g = Color.green(color);
+		int b = Color.blue(color);
+		System.out.println("r:" + r + ",g:" + g + ",b:" + b);
+		//SocketMsg sm=new SocketMsg();
+		//sm.sendMsg("LED:E005C54DF500,123,11,000255000", lcaHandler, 0, R.id.colorSeletorIv);
+
+	}
+	
 	private void ledTask()
 	{
 		Task task = new Task(LedControlActivity.this);

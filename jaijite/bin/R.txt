@@ -287,7 +287,7 @@ int id action_context_bar 0x7f05001d
 int id action_menu_divider 0x7f050016
 int id action_menu_presenter 0x7f050017
 int id action_mode_close_button 0x7f050024
-int id action_settings 0x7f050076
+int id action_settings 0x7f050077
 int id activity_chooser_view_content 0x7f050025
 int id add_btn 0x7f05003f
 int id always 0x7f05000b
@@ -350,6 +350,7 @@ int id night_line_btn 0x7f050041
 int id none 0x7f050010
 int id normal 0x7f050000
 int id passEt 0x7f050064
+int id popWindowTv 0x7f050075
 int id progress_circular 0x7f050018
 int id progress_horizontal 0x7f050019
 int id radio 0x7f05002f
@@ -372,7 +373,7 @@ int id search_mag_icon 0x7f050035
 int id search_plate 0x7f050036
 int id search_src_text 0x7f050037
 int id search_voice_btn 0x7f05003b
-int id settingListView 0x7f050075
+int id settingListView 0x7f050076
 int id settingName 0x7f050073
 int id shortcut 0x7f05002e
 int id showCustom 0x7f050007
@@ -435,9 +436,10 @@ int layout item_led_edit 0x7f030023
 int layout item_led_main 0x7f030024
 int layout item_setting 0x7f030025
 int layout led_fragment 0x7f030026
-int layout security_fragment 0x7f030027
-int layout setting_fragment 0x7f030028
-int layout support_simple_spinner_dropdown_item 0x7f030029
+int layout pop_window_led_control 0x7f030027
+int layout security_fragment 0x7f030028
+int layout setting_fragment 0x7f030029
+int layout support_simple_spinner_dropdown_item 0x7f03002a
 int menu main 0x7f0d0000
 int string abc_action_bar_home_description 0x7f0a0001
 int string abc_action_bar_up_description 0x7f0a0002
