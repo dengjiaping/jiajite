@@ -38,16 +38,15 @@ public class DataInfoDB  extends SQLiteOpenHelper
 		
 	} 
 	
-	public List<LightInfo> getAllLights()
+	public void getAllLights(List<LightInfo> lightInfos)
 	{
-		List<LightInfo> lightInfos=null;
 		String sql="select * from LIGHTS";
 		SQLiteDatabase db = getReadableDatabase();
 		Cursor mCursor=db.rawQuery(sql, null);
 		if(null != mCursor &&  mCursor.getCount() >0)
 		{
+			lightInfos.clear();
 			mCursor.moveToFirst();
-			lightInfos = new ArrayList<LightInfo>();
 			LightInfo light = null;
 			do
 			{
@@ -74,7 +73,27 @@ public class DataInfoDB  extends SQLiteOpenHelper
 		
 		mCursor.close();
 		db.close();
-		return lightInfos;
+		
+	}
+	
+	public boolean isDataEmpty()
+	{
+		boolean ret = false;
+		String sql="select * from LIGHTS";
+		SQLiteDatabase db = getReadableDatabase();
+		Cursor mCursor=db.rawQuery(sql, null);
+		if(null != mCursor &&  mCursor.getCount() >0)
+		{
+			ret = false;
+		}
+		else
+		{
+			ret = true;
+		}
+		
+		mCursor.close();
+		db.close();
+		return ret;
 	}
 	
 	public void UpdateLedState(int state, int id)

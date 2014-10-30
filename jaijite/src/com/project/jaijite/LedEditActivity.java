@@ -52,7 +52,8 @@ public class LedEditActivity extends Activity implements OnItemClickListener, On
 			lights.add(ledNames[j]);
 		}
         DataInfoDB ls = new DataInfoDB(context);
-        List<LightInfo> l= ls.getAllLights();
+        List<LightInfo> l= new ArrayList<LightInfo>();
+        		ls.getAllLights(l);
         for (int i = 0; i < l.size(); i++) {
          	lights.remove(l.get(i).getName());
 		}

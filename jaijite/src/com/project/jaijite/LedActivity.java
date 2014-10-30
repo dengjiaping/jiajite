@@ -1,5 +1,6 @@
 package com.project.jaijite;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
@@ -23,7 +24,7 @@ public class LedActivity extends BaseActivity implements InterFace
 {
 	private ListView led_list_iew = null;
 	private LedAdapter ledAdapter = null;
-	private List<LightInfo> lightInfos = null;
+	private List<LightInfo> lightInfos = new ArrayList<LightInfo>();;
 	private DataInfoDB dataDB = null;
 	private Button add_btn = null;
 	@Override
@@ -34,13 +35,8 @@ public class LedActivity extends BaseActivity implements InterFace
 		MainService.addActivity(this);
 		
 		dataDB = new DataInfoDB(this);
-		getData();
 		init();
-	}
-
-	private void getData()
-	{
-		lightInfos = dataDB.getAllLights();
+		updateUI();
 	}
 	
 	@Override
@@ -49,10 +45,7 @@ public class LedActivity extends BaseActivity implements InterFace
 		led_list_iew = (ListView) findViewById(R.id.led_list_iew);
 		add_btn = (Button) findViewById(R.id.add_btn);
 		add_btn.setOnClickListener(new addBtnClick());
-		
-		ledAdapter = new LedAdapter(this, lightInfos);
-		led_list_iew.setAdapter(ledAdapter);
-		
+	
 		led_list_iew.setOnItemClickListener(new OnItemClickListener()
 		{
 
@@ -95,18 +88,38 @@ public class LedActivity extends BaseActivity implements InterFace
 		default:
 			break;
 		}
-		lightInfos.clear();
-		lightInfos.addAll(dataDB.getAllLights());
-		ledAdapter.notifyDataSetChanged();
+		
+		updateUI();
+		
+	}
+	
+	@Override
+	protected void onResume()
+	{
+		updateUI();
+		super.onResume();
+	}
+	
+	private void updateUI()
+	{
+		dataDB.getAllLights(lightInfos);
+		if (ledAdapter != null) 
+		{
+			ledAdapter.notifyDataSetChanged();
+		}
+		else 
+		{
+			ledAdapter = new LedAdapter(this, lightInfos);
+			led_list_iew.setAdapter(ledAdapter);
+		}
+		
 	}
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 
-		lightInfos.clear();
-		lightInfos.addAll(dataDB.getAllLights());
-		ledAdapter.notifyDataSetChanged();
+		updateUI();
 		
 	}
 	

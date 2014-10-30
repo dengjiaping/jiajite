@@ -42,7 +42,7 @@ public class MainActivity extends ActivityGroup
     	if (isFirstEnter.equals(""))
 		{
     		DataInfoDB dataInfo = new DataInfoDB(this);
-    		if (dataInfo.getAllLights() == null) 
+    		if (dataInfo.isDataEmpty()) 
     		{
     			dataInfo.Add("大厅灯");
         		dataInfo.Add("厕所灯");
