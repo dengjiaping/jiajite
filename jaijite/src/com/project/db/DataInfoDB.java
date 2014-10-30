@@ -340,6 +340,16 @@ public class DataInfoDB  extends SQLiteOpenHelper
 		db.close();
 	}
 	
+	public void setFlashOff(int id)
+	{
+		
+		SQLiteDatabase db = getWritableDatabase();
+		String sql ="update lights set JUMP = 0, WATER = 0,"+
+					"TOUCH = 0, GFLIASH = 0, BFLASH = 0, WARMING = 0" + " where id = " + id;
+		db.execSQL(sql);
+		db.close();
+	}
+	
 	public void setJumpOn(int id)
 	{
 		

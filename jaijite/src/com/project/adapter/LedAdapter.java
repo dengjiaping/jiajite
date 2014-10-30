@@ -120,7 +120,7 @@ public class LedAdapter extends BaseAdapter
 				task.setAttribute(Info.LIGHT_PER+"");
 			}
 		
-			MainService.newTask(task);
+			MainService.newTask(task, true);
 		}
 		
 	}

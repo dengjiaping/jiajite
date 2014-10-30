@@ -13,7 +13,6 @@ public class Task
 	private String mac = "E005C54DF500";
 	private int function;
 	private String attribute;
-	
 	private String new_paswd;
 	private String old_paswd;
 	

@@ -28,9 +28,10 @@ public class MainService extends Service implements Runnable
 	private static boolean isRun = false;
 	// Task Queue
 	private static Queue<Task> tasks = new LinkedList<Task>();
-	private static final int READ_TIME_OUT = 10;
+	private static final int READ_TIME_OUT = 5;
 	private static ArrayList<Activity> appActivities = new ArrayList<Activity>();
 	String task_result = "";
+	private static boolean is_retry = true;
 	@Override
 	public void onCreate() 
 	{
@@ -40,8 +41,9 @@ public class MainService extends Service implements Runnable
 		thread.start();
 	}
 
-	public static void newTask(Task t)
+	public static void newTask(Task t, boolean flag)
 	{
+		is_retry = flag;
 		tasks.add(t);
 	}
 
@@ -71,28 +73,37 @@ public class MainService extends Service implements Runnable
 				// queue after executing tasks
 				if (null != task)
 				{
-					//连接3次
-					while (try_count < 3) 
+					
+					if (is_retry) 
 					{
-						try_count++;
-						task_result = doTask(task);
-						if (!task_result.equals("")) 
+						//连接3次
+						while (try_count < 3) 
 						{
-							// 更新ui
-							try_count = 0;
-							Message msg = new Message();
-							msg.obj = task;
-							handler.sendMessage(msg);
-							break;
+							try_count++;
+							task_result = doTask(task);
+							if (!task_result.equals("")) 
+							{
+								// 更新ui
+								try_count = 0;
+								Message msg = new Message();
+								msg.obj = task;
+								handler.sendMessage(msg);
+								break;
+							}
 						}
+
 					}
-					if (try_count >= 3) 
+					else 
+					{
+						task_result = doTask(task);
+					}
+					if (try_count >= 3 && is_retry) 
 					{
 						//重连3次失败
 						try_count = 0;
 						System.out.println("=====connect fail======");
 					}
-					
+
 				}
 			}
 			try
@@ -106,7 +117,7 @@ public class MainService extends Service implements Runnable
 		}
 	}
 
-	
+
 	Handler handler = new Handler()
 	{
 		public void handleMessage(android.os.Message msg)
@@ -117,7 +128,7 @@ public class MainService extends Service implements Runnable
 				activity.refresh(msg.obj);
 		}
 	};
-	
+
 	public static Activity getActivityByName(String name)
 	{
 
@@ -138,8 +149,8 @@ public class MainService extends Service implements Runnable
 		return null;
 
 	}
-	
-	private synchronized String doTask(Task task)
+
+	private String doTask(Task task)
 	{
 		String command= task.getCommand();
 		PrintWriter out=null;
@@ -150,30 +161,34 @@ public class MainService extends Service implements Runnable
 			out=new PrintWriter(client_socket.getOutputStream());
 			out.println(command);
 			out.flush();
-			reader = client_socket.getInputStream();
-			byte[] buffer = new byte[256];
-			int lenght;
-			int read_counts = 0;
-			while (read_counts < READ_TIME_OUT) 
+			if (is_retry) 
 			{
-				if (reader.available() != 0)
+				reader = client_socket.getInputStream();
+				byte[] buffer = new byte[256];
+				int lenght;
+				int read_counts = 0;
+				while (read_counts < READ_TIME_OUT) 
 				{
-					if ((lenght = reader.read(buffer)) != -1)
+					if (reader.available() != 0)
 					{
-						ByteArrayBuffer byteBuffer = new ByteArrayBuffer(lenght);
-						byteBuffer.append(buffer, 0, lenght);
-						byte[] data = byteBuffer.buffer();
-						resultStr = new String(data, "UTF-8");
-						System.out.println("send command resultStr====["+resultStr+"]");
+						if ((lenght = reader.read(buffer)) != -1)
+						{
+							ByteArrayBuffer byteBuffer = new ByteArrayBuffer(lenght);
+							byteBuffer.append(buffer, 0, lenght);
+							byte[] data = byteBuffer.buffer();
+							resultStr = new String(data, "UTF-8");
+							System.out.println("send command resultStr====["+resultStr+"]");
+						}
 					}
+					if (!resultStr.equals("")) 
+					{
+						return resultStr;
+					}
+					read_counts++;
+					Thread.sleep(1 * 1000);
 				}
-				if (!resultStr.equals("")) 
-				{
-					return resultStr;
-				}
-				read_counts++;
-				Thread.sleep(1 * 1000);
 			}
+
 		}
 
 		catch (Exception ex)
@@ -183,26 +198,26 @@ public class MainService extends Service implements Runnable
 		}
 		return "";
 	}
-	
+
 
 	public static void addActivity(Activity activity)
 	{
 		appActivities.add(activity);
 
 	}
-	
+
 	public static void removeActivity(Activity activity)
 	{
 		appActivities.remove(activity);
 
 	}
-	
+
 	@Override
 	public IBinder onBind(Intent arg0)
 	{
 		return null;
 	}
-	
+
 	@Override
 	public void onDestroy()
 	{

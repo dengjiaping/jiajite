@@ -54,10 +54,10 @@ OnClickListener, OnTouchListener
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_led_control);
 		MainService.addActivity(this);
-		
+
 		dataDb = new DataInfoDB(this);
 		lightInfo = (LightInfo) getIntent().getSerializableExtra("lights");
-		
+
 		init();
 		groupInit(group1Tv);
 	}
@@ -68,7 +68,7 @@ OnClickListener, OnTouchListener
 		view.setTag(1);
 		((TextView) view).setTextColor(Color.RED);
 	}
-	
+
 	@Override
 	public void init()
 	{
@@ -115,7 +115,7 @@ OnClickListener, OnTouchListener
 		group4Tv.setOnClickListener(this);
 	}
 
-	
+
 	private void updateUI()
 	{
 		dataDb.getLightInfo(lightInfo, lightInfo.getId());
@@ -123,50 +123,14 @@ OnClickListener, OnTouchListener
 		delayCloseTv.setText("延时关灯"+lightInfo.getDelay()+"分钟");
 		timingOpenTv.setText("定时开灯"+lightInfo.getTime_on());
 		timingCloseTv.setText("定时关灯"+lightInfo.getTime_off());
-		
-		flash1tv.setTextColor(lightInfo.getJump() == 0?Color.WHITE:Color.RED);
-		flash2tv.setTextColor(lightInfo.getWater() == 0?Color.WHITE:Color.RED);
-		flash3tv.setTextColor(lightInfo.getTouch() == 0?Color.WHITE:Color.RED);
-		flash4tv.setTextColor(lightInfo.getGflash()== 0?Color.WHITE:Color.RED);
-		flash5tv.setTextColor(lightInfo.getBflash() == 0?Color.WHITE:Color.RED);
-		flash6tv.setTextColor(lightInfo.getWarming() == 0?Color.WHITE:Color.RED);
-		
-		if (lightInfo.getWarming() == Info.ON)
-		{
-			flash6tv.setTextColor(Color.RED);
-		}
-		else 
-		{
-			flash6tv.setTextColor(Color.WHITE);
-		}
-		
-		if (lightInfo.getBflash() == Info.ON)
-		{
-			flash5tv.setTextColor(Color.RED);
-		}
-		else 
-		{
-			flash5tv.setTextColor(Color.WHITE);
-		}
-		
-		if (lightInfo.getGflash() == Info.ON)
-		{
-			flash4tv.setTextColor(Color.RED);
-		}
-		else 
-		{
-			flash4tv.setTextColor(Color.WHITE);
-		}
-		
-		if (lightInfo.getTouch() == Info.ON)
-		{
-			flash3tv.setTextColor(Color.RED);
-		}
-		else 
-		{
-			flash3tv.setTextColor(Color.WHITE);
-		}
-		
+
+		flash1tv.setTextColor(lightInfo.getJump() == Info.OFF?Color.WHITE:Color.RED);
+		flash2tv.setTextColor(lightInfo.getWater() == Info.OFF?Color.WHITE:Color.RED);
+		flash3tv.setTextColor(lightInfo.getTouch() == Info.OFF?Color.WHITE:Color.RED);
+		flash4tv.setTextColor(lightInfo.getGflash()== Info.OFF?Color.WHITE:Color.RED);
+		flash5tv.setTextColor(lightInfo.getBflash() == Info.OFF?Color.WHITE:Color.RED);
+		flash6tv.setTextColor(lightInfo.getWarming() == Info.OFF?Color.WHITE:Color.RED);
+
 		if (lightInfo.getLed_state() == Info.LED_ON)
 		{
 			led_turn_btn.setTextColor(Color.RED);
@@ -175,7 +139,7 @@ OnClickListener, OnTouchListener
 		{
 			led_turn_btn.setTextColor(Color.WHITE);
 		}
-		
+
 		if (lightInfo.getNight_lamp_state() == Info.LED_ON)
 		{
 			night_line_btn.setTextColor(Color.RED);
@@ -184,26 +148,9 @@ OnClickListener, OnTouchListener
 		{
 			night_line_btn.setTextColor(Color.WHITE);
 		}
-		
-		if (lightInfo.getJump() == Info.ON)
-		{
-			flash1tv.setTextColor(Color.RED);
-		}
-		else 
-		{
-			flash1tv.setTextColor(Color.WHITE);
-		}
-		
-		if (lightInfo.getWater() == Info.ON)
-		{
-			flash2tv.setTextColor(Color.RED);
-		}
-		else 
-		{
-			flash2tv.setTextColor(Color.WHITE);
-		}
+
 	}
-	
+
 	@Override
 	public void refresh(Object... params)
 	{
@@ -236,74 +183,35 @@ OnClickListener, OnTouchListener
 		default:
 			break;
 		}
-		
+
 		updateUI();
 	}
-	
+
 	private void updateFlashData(int flashID)
 	{
 		int ledID  = lightInfo.getId();
 		switch (flashID) 
 		{
+		case 0:
+			dataDb.setFlashOff(ledID);
+			break;
 		case 1:
-			if (lightInfo.getJump() == Info.OFF) 
-			{
-				dataDb.setJumpOn(ledID);
-			}
-			else
-			{
-				dataDb.setJumpOff(ledID);
-			}
+			dataDb.setJumpOn(ledID);
 			break;
 		case 2:
-			if (lightInfo.getWater() == Info.OFF) 
-			{
-				dataDb.setWaterOn(ledID);
-			}
-			else
-			{
-				dataDb.setWaterOff(ledID);
-			}
+			dataDb.setWaterOn(ledID);
 			break;
 		case 3:
-			if (lightInfo.getTouch() == Info.OFF) 
-			{
-				dataDb.setTouchOn(ledID);
-			}
-			else
-			{
-				dataDb.setTouchOff(ledID);
-			}
+			dataDb.setTouchOn(ledID);
 			break;
 		case 4:
-			if (lightInfo.getGflash() == Info.OFF) 
-			{
-				dataDb.setGflashOn(ledID);
-			}
-			else
-			{
-				dataDb.setGflashOff(ledID);
-			}
+			dataDb.setGflashOn(ledID);
 			break;
 		case 5:
-			if (lightInfo.getBflash() == Info.OFF) 
-			{
-				dataDb.setBflashOn(ledID);
-			}
-			else
-			{
-				dataDb.setBflashOff(ledID);
-			}
+			dataDb.setBflashOff(ledID);
 			break;
 		case 6:
-			if (lightInfo.getWarming() == Info.OFF) 
-			{
-				dataDb.setWarmingOn(ledID);
-			}
-			else
-			{
-				dataDb.setWarmingOff(ledID);
-			}
+			dataDb.setWarmingOn(ledID);
 			break;
 		default:
 			break;
@@ -338,9 +246,9 @@ OnClickListener, OnTouchListener
 			task.setFunction(Info.TURN_ON);
 			task.setAttribute(Info.LIGHT_PER+"");
 		}
-		MainService.newTask(task);
+		MainService.newTask(task, true);
 	}
-	
+
 	private void nightLampsTask()
 	{
 		Task task = new Task(LedControlActivity.this);
@@ -356,9 +264,9 @@ OnClickListener, OnTouchListener
 			task.setFunction(Info.NIGHT_LAMPSS);
 			task.setAttribute(Info.ON+"");
 		}
-		MainService.newTask(task);
+		MainService.newTask(task, true);
 	}
-	
+
 	public void groupEdit(View view) {
 
 		int[] c = { Color.RED, Color.WHITE };
@@ -381,7 +289,7 @@ OnClickListener, OnTouchListener
 		view.setTag(idxs[idx]);
 		((TextView) view).setTextColor(c[idx]);
 	}
-	
+
 	@Override
 	public void onClick(View v)
 	{
@@ -414,19 +322,34 @@ OnClickListener, OnTouchListener
 		case R.id.falsh1Tv:
 			flashEdit(1);
 			break;
+		case R.id.falsh2Tv:
+			flashEdit(2);
+			break;
+		case R.id.falsh3Tv:
+			flashEdit(3);
+			break;
+		case R.id.falsh4Tv:
+			flashEdit(4);
+			break;
+		case R.id.falsh5Tv:
+			flashEdit(5);
+			break;
+		case R.id.falsh6Tv:
+			flashEdit(6);
+			break;
 		case R.id.group1Tv:
 		case R.id.group2Tv:
 		case R.id.group3Tv:
 		case R.id.group4Tv:
 			groupEdit(v);
 			break;
-			
+
 		default:
 			break;
 		}
-		
+
 	}
-	
+
 	private void flashEdit(int flashID)
 	{
 		Task task = new Task(LedControlActivity.this);
@@ -519,15 +442,15 @@ OnClickListener, OnTouchListener
 		default:
 			break;
 		}
-		MainService.newTask(task);
+		MainService.newTask(task, true);
 	}
-	
+
 	@Override
 	protected void onResume() 
 	{
 		super.onResume();
 		updateUI();
-		
+
 	}
 
 }

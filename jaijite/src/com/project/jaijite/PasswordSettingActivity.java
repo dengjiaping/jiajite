@@ -93,7 +93,7 @@ public class PasswordSettingActivity extends BaseActivity implements OnClickList
 						task.sethead("CODE:");
 						task.setOld_paswd(old_paswd);
 						task.setNew_paswd(passStr);
-						MainService.newTask(task);
+						MainService.newTask(task, false);
 						ToastUtil.showShortToast("重设成功");
 						finish();
 					} 
