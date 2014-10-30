@@ -17,6 +17,10 @@ public class Info
 	
 	//flash
 	public  static final int FLASH = 8;
+	//bright
+	public  static final int BRIGHT = 5;
+	//color
+	public  static final int COLOR = 9;
 	//小夜灯
 	public  static final int NIGHT_LAMPSS = 7;
 	

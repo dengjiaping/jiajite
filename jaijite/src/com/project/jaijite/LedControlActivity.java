@@ -272,9 +272,11 @@ OnClickListener, OnTouchListener
 				if (Math.abs(tv - ctv) > 0) 
 				{
 					ctv = tv;
-					System.out.println("=============="+tv);
-					//SocketMsg sm=new SocketMsg();
-					//sm.sendMsg("LED:E005C54DF500,123456,5," + tv,lcaHandler,0,R.id.brightnessTv);
+					Task task = new Task(LedControlActivity.this);
+					task.setId(lightInfo.getId());
+					task.setFunction(Info.BRIGHT);
+					task.setAttribute(tv+"");
+					MainService.newTask(task, false);
 				}
 
 			} 
@@ -282,15 +284,15 @@ OnClickListener, OnTouchListener
 			{
 				tv = (3000 + ((int) (x / colorTempTv.getWidth() * 5000)));
 				popTextView.setText(tv + "k");
-
 				popupWindow.update((int) x, popy, -1, -1, true);
 				if (Math.abs(tv - ctv) > 50) 
 				{
 					ctv = tv;
-					System.out.println("************"+Math.round(tv));
-					//SocketMsg sm=new SocketMsg();
-					//sm.sendMsg("LED:E005C54DF500,123456,9," + tv,lcaHandler,0,R.id.colorTempTv);
-
+					Task task = new Task(LedControlActivity.this);
+					task.setId(lightInfo.getId());
+					task.setFunction(Info.COLOR);
+					task.setAttribute(tv+"");
+					MainService.newTask(task, false);
 				}
 			}
 
@@ -298,14 +300,13 @@ OnClickListener, OnTouchListener
 		else if (action == MotionEvent.ACTION_UP)
 		{
 			popupWindow.dismiss();
-			System.out.println("xxxxxxxxxxxx" + tv);
 			if (view.getId() == R.id.brightnessTv)
 			{
-				//ls.Update("LIGHTLEVEL=? ", new Object[] { tv, light.getId() });
+				dataDb.UpdatBright(tv, lightInfo.getId());
 
-			} else if (view.getId() == R.id.colorTempTv) {
-
-				//ls.Update("CORLORTEMP=? ", new Object[] { tv, light.getId() });
+			} else if (view.getId() == R.id.colorTempTv) 
+			{
+				dataDb.UpdatColorTemp(tv, lightInfo.getId());
 			} 
 			/*else if (view.getId() == R.id.colorSeletorIv) 
 			{

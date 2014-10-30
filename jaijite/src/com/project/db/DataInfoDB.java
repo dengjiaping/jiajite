@@ -430,6 +430,22 @@ public class DataInfoDB  extends SQLiteOpenHelper
 		db.close();
 	}
 	
+	public void UpdatBright(int value, int id)
+	{
+		SQLiteDatabase db = getWritableDatabase();
+		String sql ="update lights set LIGHTLEVEL = "+value+" where id = " + id;
+		db.execSQL(sql);
+		db.close();
+	}
+	
+	public void UpdatColorTemp(int value, int id)
+	{
+		SQLiteDatabase db = getWritableDatabase();
+		String sql ="update lights set CORLORTEMP = "+value+" where id = " + id;
+		db.execSQL(sql);
+		db.close();
+	}
+	
 	public void Add(String name)
 	{
 		SQLiteDatabase db= getWritableDatabase();

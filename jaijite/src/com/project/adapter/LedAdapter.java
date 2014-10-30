@@ -76,11 +76,11 @@ public class LedAdapter extends BaseAdapter
 		holder.ledTempTv.setText("色温："+light.getColor_temp()+"k");
 
 		String state = light.getTime_on();
-		holder.timingOpenLedTv.setText("定时开灯："+(state.equals("0")?"关":"开"));
+		holder.timingOpenLedTv.setText("定时开灯："+(state.equals("00:00")?"关":"开"));
 		state = light.getTime_off();
-		holder.timingCloseLedTv.setText("定时关灯："+(state.equals("0")?"关":"开"));
+		holder.timingCloseLedTv.setText("定时关灯："+(state.equals("00:00")?"关":"开"));
 		state = light.getDelay();
-		holder.delayCloseLedTv.setText("延时关灯："+(state.equals("0")?"关":"开"));
+		holder.delayCloseLedTv.setText("延时关灯："+(state.equals("00:00")?"关":"开"));
 		holder.position = position;
 		holder.detailslayout.setTag(position);
 		holder.ledPowerBtn.setOnClickListener(new ledPowerBtnListener(light));
