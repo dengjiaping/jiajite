@@ -89,7 +89,7 @@ public class PasswordSettingActivity extends BaseActivity implements OnClickList
 					public void onClick(DialogInterface dialog, int which)
 					{ 
 						PreferencesBase.setValueForTargetKey(PreferencesBase.PassWord, passStr);
-						Task task = new Task();
+						Task task = new Task(PasswordSettingActivity.this);
 						task.sethead("CODE:");
 						task.setOld_paswd(old_paswd);
 						task.setNew_paswd(passStr);

@@ -1,5 +1,10 @@
 package com.project.jaijite;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,8 +15,13 @@ import android.widget.FrameLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.project.bean.Info;
+import com.project.bean.LightInfo;
+import com.project.bean.Task;
+import com.project.db.DataInfoDB;
 import com.project.jiajiteInterface.InterFace;
 import com.project.service.MainService;
+import com.project.util.ToastUtil;
 
 public class LedControlActivity extends BaseActivity implements InterFace,
 OnClickListener, OnTouchListener 
@@ -35,31 +45,52 @@ OnClickListener, OnTouchListener
 	private TextView timingCloseTv;
 	private TextView flash1tv, flash2tv, flash3tv, flash4tv, flash5tv,
 	flash6tv;
+	private DataInfoDB dataDb = null;
+	private LightInfo lightInfo = null;
+	List<View> ledgroups = new ArrayList<View>();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_led_control);
 		MainService.addActivity(this);
+		
+		dataDb = new DataInfoDB(this);
+		lightInfo = (LightInfo) getIntent().getSerializableExtra("lights");
+		
 		init();
-
+		groupInit(group1Tv);
 	}
 
+	public void groupInit(View view) 
+	{
+		ledgroups.add(view);
+		view.setTag(1);
+		((TextView) view).setTextColor(Color.RED);
+	}
+	
 	@Override
 	public void init()
 	{
 		back_btn = (Button) findViewById(R.id.back_btn);
+		back_btn.setOnClickListener(this);
 		title_txt = (TextView) findViewById(R.id.title_txt);
 		add_btn = (FrameLayout) findViewById(R.id.add_btn);
+		add_btn.setOnClickListener(this);
 		night_line_btn = (TextView) findViewById(R.id.night_line_btn);
+		night_line_btn.setOnClickListener(this);
 		led_turn_btn = (TextView) findViewById(R.id.led_turn_btn);
+		led_turn_btn.setOnClickListener(this);
 		brightnessTv = (TextView) findViewById(R.id.brightnessTv);
 		sblight = (SeekBar) findViewById(R.id.sblight);
 		colorTempTv = (TextView) findViewById(R.id.colorTempTv);
 		delayCloseTv = (TextView) findViewById(R.id.delayCloseTv);
 		delaySet = (FrameLayout) findViewById(R.id.delaySet);
+		delaySet.setOnClickListener(this);
 		timingopenset = (FrameLayout) findViewById(R.id.timingopenset);
+		timingopenset.setOnClickListener(this);
 		timingcloseset = (FrameLayout) findViewById(R.id.timingcloseset);
+		timingcloseset.setOnClickListener(this);
 		timingOpenTv = (TextView) findViewById(R.id.timingOpenTv);
 		timingCloseTv = (TextView) findViewById(R.id.timingCloseTv);
 		flash1tv = (TextView) findViewById(R.id.falsh1Tv);
@@ -84,17 +115,205 @@ OnClickListener, OnTouchListener
 		group4Tv.setOnClickListener(this);
 	}
 
-	@Override
-	public void refresh(Object... params)
+	
+	private void updateUI()
 	{
+		dataDb.getLightInfo(lightInfo, lightInfo.getId());
+
+		delayCloseTv.setText("延时关灯"+lightInfo.getDelay()+"分钟");
+		timingOpenTv.setText("定时开灯"+lightInfo.getTime_on());
+		timingCloseTv.setText("定时关灯"+lightInfo.getTime_off());
 		
+		flash1tv.setTextColor(lightInfo.getJump() == 0?Color.WHITE:Color.RED);
+		flash2tv.setTextColor(lightInfo.getWater() == 0?Color.WHITE:Color.RED);
+		flash3tv.setTextColor(lightInfo.getTouch() == 0?Color.WHITE:Color.RED);
+		flash4tv.setTextColor(lightInfo.getGflash()== 0?Color.WHITE:Color.RED);
+		flash5tv.setTextColor(lightInfo.getBflash() == 0?Color.WHITE:Color.RED);
+		flash6tv.setTextColor(lightInfo.getWarming() == 0?Color.WHITE:Color.RED);
+		
+		if (lightInfo.getWarming() == Info.ON)
+		{
+			flash6tv.setTextColor(Color.RED);
+		}
+		else 
+		{
+			flash6tv.setTextColor(Color.WHITE);
+		}
+		
+		if (lightInfo.getBflash() == Info.ON)
+		{
+			flash5tv.setTextColor(Color.RED);
+		}
+		else 
+		{
+			flash5tv.setTextColor(Color.WHITE);
+		}
+		
+		if (lightInfo.getGflash() == Info.ON)
+		{
+			flash4tv.setTextColor(Color.RED);
+		}
+		else 
+		{
+			flash4tv.setTextColor(Color.WHITE);
+		}
+		
+		if (lightInfo.getTouch() == Info.ON)
+		{
+			flash3tv.setTextColor(Color.RED);
+		}
+		else 
+		{
+			flash3tv.setTextColor(Color.WHITE);
+		}
+		
+		if (lightInfo.getLed_state() == Info.LED_ON)
+		{
+			led_turn_btn.setTextColor(Color.RED);
+		}
+		else 
+		{
+			led_turn_btn.setTextColor(Color.WHITE);
+		}
+		
+		if (lightInfo.getNight_lamp_state() == Info.LED_ON)
+		{
+			night_line_btn.setTextColor(Color.RED);
+		}
+		else 
+		{
+			night_line_btn.setTextColor(Color.WHITE);
+		}
+		
+		if (lightInfo.getJump() == Info.ON)
+		{
+			flash1tv.setTextColor(Color.RED);
+		}
+		else 
+		{
+			flash1tv.setTextColor(Color.WHITE);
+		}
+		
+		if (lightInfo.getWater() == Info.ON)
+		{
+			flash2tv.setTextColor(Color.RED);
+		}
+		else 
+		{
+			flash2tv.setTextColor(Color.WHITE);
+		}
 	}
 	
 	@Override
+	public void refresh(Object... params)
+	{
+		Task task = (Task)params[0];
+		switch (task.getFunction()) 
+		{
+		case Info.TURN_ON:
+			dataDb.UpdateLedState(Info.LED_ON, task.getId());
+			dataDb.UpdateNightLampsState(Info.LED_OFF, task.getId());
+			break;
+		case Info.TURN_OFF:
+			dataDb.UpdateLedState(Info.LED_OFF, task.getId());
+			break;
+
+		case Info.NIGHT_LAMPSS:
+			if (task.getAttribute().equals(String.valueOf(Info.ON)))
+			{
+				dataDb.UpdateLedState(Info.LED_OFF, task.getId());
+				dataDb.UpdateNightLampsState(Info.ON, task.getId());
+			}
+			else 
+			{
+				dataDb.UpdateNightLampsState(Info.OFF, task.getId());
+			}
+			break;
+		case Info.FLASH:
+			int flashID = Integer.valueOf(task.getAttribute());
+			updateFlashData(flashID);
+			break;
+		default:
+			break;
+		}
+		
+		updateUI();
+	}
+	
+	private void updateFlashData(int flashID)
+	{
+		int ledID  = lightInfo.getId();
+		switch (flashID) 
+		{
+		case 1:
+			if (lightInfo.getJump() == Info.OFF) 
+			{
+				dataDb.setJumpOn(ledID);
+			}
+			else
+			{
+				dataDb.setJumpOff(ledID);
+			}
+			break;
+		case 2:
+			if (lightInfo.getWater() == Info.OFF) 
+			{
+				dataDb.setWaterOn(ledID);
+			}
+			else
+			{
+				dataDb.setWaterOff(ledID);
+			}
+			break;
+		case 3:
+			if (lightInfo.getTouch() == Info.OFF) 
+			{
+				dataDb.setTouchOn(ledID);
+			}
+			else
+			{
+				dataDb.setTouchOff(ledID);
+			}
+			break;
+		case 4:
+			if (lightInfo.getGflash() == Info.OFF) 
+			{
+				dataDb.setGflashOn(ledID);
+			}
+			else
+			{
+				dataDb.setGflashOff(ledID);
+			}
+			break;
+		case 5:
+			if (lightInfo.getBflash() == Info.OFF) 
+			{
+				dataDb.setBflashOn(ledID);
+			}
+			else
+			{
+				dataDb.setBflashOff(ledID);
+			}
+			break;
+		case 6:
+			if (lightInfo.getWarming() == Info.OFF) 
+			{
+				dataDb.setWarmingOn(ledID);
+			}
+			else
+			{
+				dataDb.setWarmingOff(ledID);
+			}
+			break;
+		default:
+			break;
+		}
+	}
+	@Override
 	protected void onDestroy()
 	{
-		super.onDestroy();
 		MainService.removeActivity(this);
+		super.onDestroy();
 	}
 
 	@Override
@@ -104,10 +323,210 @@ OnClickListener, OnTouchListener
 		return false;
 	}
 
-	@Override
-	public void onClick(View arg0)
+	private void ledTask()
 	{
-		// TODO Auto-generated method stub
+		Task task = new Task(LedControlActivity.this);
+		if (dataDb.getLedState(lightInfo.getId()) == Info.LED_ON)
+		{
+			task.setId(lightInfo.getId());
+			task.setFunction(Info.TURN_OFF);
+			task.setAttribute(Info.LIGHT_PER+"");
+		}
+		else
+		{
+			task.setId(lightInfo.getId());
+			task.setFunction(Info.TURN_ON);
+			task.setAttribute(Info.LIGHT_PER+"");
+		}
+		MainService.newTask(task);
+	}
+	
+	private void nightLampsTask()
+	{
+		Task task = new Task(LedControlActivity.this);
+		if (dataDb.getNightLampState(lightInfo.getId()) == Info.LED_ON)
+		{
+			task.setId(lightInfo.getId());
+			task.setFunction(Info.NIGHT_LAMPSS);
+			task.setAttribute(Info.OFF+"");
+		}
+		else
+		{
+			task.setId(lightInfo.getId());
+			task.setFunction(Info.NIGHT_LAMPSS);
+			task.setAttribute(Info.ON+"");
+		}
+		MainService.newTask(task);
+	}
+	
+	public void groupEdit(View view) {
+
+		int[] c = { Color.RED, Color.WHITE };
+		int[] idxs = { 1, 0 };
+		int idx = 0;
+		if (view.getTag() == null || view.getTag().equals(0)) {
+			ledgroups.add(view);
+			idx = 0;
+		} else {
+			if (ledgroups.size() > 1) {
+				ledgroups.remove(view);
+				idx = 1;
+			} else {
+				ToastUtil.showShortToast("至少有一组选中");
+				return;
+			}
+
+		}
+		System.out.println(idx);
+		view.setTag(idxs[idx]);
+		((TextView) view).setTextColor(c[idx]);
+	}
+	
+	@Override
+	public void onClick(View v)
+	{
+		switch (v.getId()) 
+		{
+		case R.id.back_btn:
+			finish();
+			break;
+		case R.id.led_turn_btn:
+			ledTask();
+			break;
+		case R.id.night_line_btn:
+			nightLampsTask();
+			break;
+		case R.id.delaySet:
+			Intent intent1 = new Intent(LedControlActivity.this, SetSleepTimeActivity.class);
+			intent1.putExtra("ledID", lightInfo.getId());
+			startActivity(intent1);
+			break;
+		case R.id.timingopenset:
+			Intent intent2 = new Intent(LedControlActivity.this, SetTimingOpenActivity.class);
+			intent2.putExtra("ledID", lightInfo.getId());
+			startActivity(intent2);
+			break;
+		case R.id.timingcloseset:
+			Intent intent3 = new Intent(LedControlActivity.this, SetTimingCloseActivity.class);
+			intent3.putExtra("ledID", lightInfo.getId());
+			startActivity(intent3);
+			break;
+		case R.id.falsh1Tv:
+			flashEdit(1);
+			break;
+		case R.id.group1Tv:
+		case R.id.group2Tv:
+		case R.id.group3Tv:
+		case R.id.group4Tv:
+			groupEdit(v);
+			break;
+			
+		default:
+			break;
+		}
+		
+	}
+	
+	private void flashEdit(int flashID)
+	{
+		Task task = new Task(LedControlActivity.this);
+		switch (flashID) 
+		{
+		case 1:
+			if (lightInfo.getJump() == Info.ON) 
+			{
+				task.setId(lightInfo.getId());
+				task.setFunction(Info.FLASH);
+				task.setAttribute("0000");
+			}
+			else
+			{
+				task.setId(lightInfo.getId());
+				task.setFunction(Info.FLASH);
+				task.setAttribute(flashID+"");
+			}
+			break;
+		case 2:
+			if (lightInfo.getWater() == Info.ON) 
+			{
+				task.setId(lightInfo.getId());
+				task.setFunction(Info.FLASH);
+				task.setAttribute("0000");
+			}
+			else
+			{
+				task.setId(lightInfo.getId());
+				task.setFunction(Info.FLASH);
+				task.setAttribute(flashID+"");
+			}
+			break;
+		case 3:
+			if (lightInfo.getTouch() == Info.ON) 
+			{
+				task.setId(lightInfo.getId());
+				task.setFunction(Info.FLASH);
+				task.setAttribute("0000");
+			}
+			else
+			{
+				task.setId(lightInfo.getId());
+				task.setFunction(Info.FLASH);
+				task.setAttribute(flashID+"");
+			}
+			break;
+		case 4:
+			if (lightInfo.getGflash() == Info.ON) 
+			{
+				task.setId(lightInfo.getId());
+				task.setFunction(Info.FLASH);
+				task.setAttribute("0000");
+			}
+			else
+			{
+				task.setId(lightInfo.getId());
+				task.setFunction(Info.FLASH);
+				task.setAttribute(flashID+"");
+			}
+			break;
+		case 5:
+			if (lightInfo.getBflash() == Info.ON) 
+			{
+				task.setId(lightInfo.getId());
+				task.setFunction(Info.FLASH);
+				task.setAttribute("0000");
+			}
+			else
+			{
+				task.setId(lightInfo.getId());
+				task.setFunction(Info.FLASH);
+				task.setAttribute(flashID+"");
+			}
+			break;
+		case 6:
+			if (lightInfo.getWarming() == Info.ON) 
+			{
+				task.setId(lightInfo.getId());
+				task.setFunction(Info.FLASH);
+				task.setAttribute("0000");
+			}
+			else
+			{
+				task.setId(lightInfo.getId());
+				task.setFunction(Info.FLASH);
+				task.setAttribute(flashID+"");
+			}
+			break;
+		default:
+			break;
+		}
+		MainService.newTask(task);
+	}
+	
+	@Override
+	protected void onResume() 
+	{
+		super.onResume();
+		updateUI();
 		
 	}
 

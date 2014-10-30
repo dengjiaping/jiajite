@@ -35,6 +35,7 @@ public class LedActivity extends BaseActivity implements InterFace
 		MainService.addActivity(this);
 		
 		dataDB = new DataInfoDB(this);
+
 		init();
 		updateUI();
 	}
@@ -57,7 +58,7 @@ public class LedActivity extends BaseActivity implements InterFace
 				Bundle bundle=new Bundle();
 				bundle.putSerializable("lights", lightInfos.get(position));
 				intent.putExtras(bundle);
-				startActivityForResult(intent, 2);
+				startActivity(intent);
 				
 			}
 		});
@@ -80,6 +81,8 @@ public class LedActivity extends BaseActivity implements InterFace
 		{
 		case Info.TURN_ON:
 			dataDB.UpdateLedState(Info.LED_ON, task.getId());
+			dataDB.UpdateNightLampsState(Info.LED_OFF, task.getId());
+			
 			break;
 		case Info.TURN_OFF:
 			dataDB.UpdateLedState(Info.LED_OFF, task.getId());
@@ -112,14 +115,6 @@ public class LedActivity extends BaseActivity implements InterFace
 			ledAdapter = new LedAdapter(this, lightInfos);
 			led_list_iew.setAdapter(ledAdapter);
 		}
-		
-	}
-	
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
-
-		updateUI();
 		
 	}
 	

@@ -78,17 +78,22 @@ public class LedEditActivity extends Activity implements OnItemClickListener, On
         }
 
         @Override
-        public View getView(int position, View contentView, ViewGroup parent) {
+        public View getView(int position, View contentView, ViewGroup parent)
+        {
         	ViewHolder viewHolder=null;
-        	if (contentView == null) {
+        	if (contentView == null) 
+        	{
         		viewHolder=new ViewHolder();
         		LayoutInflater layout = LayoutInflater.from(context);
         		contentView = layout.inflate(R.layout.item_led_edit, null);
         		viewHolder.textView= (TextView) contentView.findViewById(R.id.ledNameTv);
         		viewHolder.checkBtn= (CheckBox) contentView.findViewById(R.id.ledCheckBox);
         		contentView.setTag(viewHolder);
-			}else
+			}
+        	else
+        	{
 				viewHolder=(ViewHolder)contentView.getTag();
+        	}
         	viewHolder.textView.setText(lights.get(position));
         	viewHolder.checkBtn.setChecked(false);
         	final int p=position;
@@ -97,9 +102,8 @@ public class LedEditActivity extends Activity implements OnItemClickListener, On
             ledCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 				
 				@Override
-				public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
-					// TODO Auto-generated method stub
-					System.out.println(arg0.getText()+":"+arg1+":"+p);
+				public void onCheckedChanged(CompoundButton arg0, boolean arg1)
+				{
 					if(arg1)
 						lightname.add(lights.get(p));
 					else

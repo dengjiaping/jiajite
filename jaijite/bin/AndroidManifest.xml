@@ -62,6 +62,15 @@
         <activity
             android:name=".LedControlActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".SetSleepTimeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SetTimingOpenActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SetTimingCloseActivity"
+            android:screenOrientation="portrait" />
 
         <service android:name="com.project.service.MainService" />
     </application>

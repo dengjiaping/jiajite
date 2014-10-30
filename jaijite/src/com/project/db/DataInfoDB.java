@@ -38,6 +38,40 @@ public class DataInfoDB  extends SQLiteOpenHelper
 		
 	} 
 	
+	public void getLightInfo(LightInfo light, int id)
+	{
+		SQLiteDatabase db = getReadableDatabase();
+		String sql="select * from LIGHTS where id = "+id;
+		int ret = 0;
+		Cursor mCursor = db.rawQuery(sql, null);
+		if(null != mCursor &&  mCursor.getCount() >0)
+		{
+			mCursor.moveToFirst();
+			do
+			{
+				light.setId(mCursor.getInt(mCursor.getColumnIndex("ID")));
+				light.setName(mCursor.getString(mCursor.getColumnIndex("NAME")));
+				light.setLight_level(mCursor.getInt(mCursor.getColumnIndex("LIGHTLEVEL")));
+				light.setColor_temp(mCursor.getInt(mCursor.getColumnIndex("CORLORTEMP")));
+				light.setTime_off(mCursor.getString(mCursor.getColumnIndex("TOMEOFF")));
+				light.setTime_on(mCursor.getString(mCursor.getColumnIndex("TIMEON")));
+				light.setDelay(mCursor.getString(mCursor.getColumnIndex("DELAY")));
+				light.setJump(mCursor.getInt(mCursor.getColumnIndex("JUMP")));
+				light.setWater(mCursor.getInt(mCursor.getColumnIndex("WATER")));
+				light.setTouch(mCursor.getInt(mCursor.getColumnIndex("TOUCH")));
+				light.setGflash(mCursor.getInt(mCursor.getColumnIndex("GFLIASH")));
+				light.setBflash(mCursor.getInt(mCursor.getColumnIndex("BFLASH")));
+				light.setWarming(mCursor.getInt(mCursor.getColumnIndex("WARMING")));
+				light.setLed_state(mCursor.getInt(mCursor.getColumnIndex("LEDSTATE")));
+				light.setNight_lamp_state(mCursor.getInt(mCursor.getColumnIndex("NIGHTLAMPSTATE")));
+				
+			}while (mCursor.moveToNext());
+		}
+		
+		mCursor.close();
+		db.close();
+	}
+	
 	public void getAllLights(List<LightInfo> lightInfos)
 	{
 		String sql="select * from LIGHTS";
@@ -96,11 +130,292 @@ public class DataInfoDB  extends SQLiteOpenHelper
 		return ret;
 	}
 	
+	public int getWarmingState(int id)
+	{
+		SQLiteDatabase db = getReadableDatabase();
+		String sql="select WARMING from LIGHTS where id = "+id;
+		int ret = 0;
+		Cursor mCursor = db.rawQuery(sql, null);
+		mCursor.moveToFirst();
+		do
+		{
+			ret = mCursor.getInt(0);
+		}while (mCursor.moveToNext());
+		db.close();
+		mCursor.close();
+		return ret;
+	}
+	
+	public int getBflashState(int id)
+	{
+		SQLiteDatabase db = getReadableDatabase();
+		String sql="select BFLASH from LIGHTS where id = "+id;
+		int ret = 0;
+		Cursor mCursor = db.rawQuery(sql, null);
+		mCursor.moveToFirst();
+		do
+		{
+			ret = mCursor.getInt(0);
+		}while (mCursor.moveToNext());
+		db.close();
+		mCursor.close();
+		return ret;
+	}
+	
+	public int getGflashState(int id)
+	{
+		SQLiteDatabase db = getReadableDatabase();
+		String sql="select GFLIASH from LIGHTS where id = "+id;
+		int ret = 0;
+		Cursor mCursor = db.rawQuery(sql, null);
+		mCursor.moveToFirst();
+		do
+		{
+			ret = mCursor.getInt(0);
+		}while (mCursor.moveToNext());
+		db.close();
+		mCursor.close();
+		return ret;
+	}
+	
+	public int getTouchState(int id)
+	{
+		SQLiteDatabase db = getReadableDatabase();
+		String sql="select TOUCH from LIGHTS where id = "+id;
+		int ret = 0;
+		Cursor mCursor = db.rawQuery(sql, null);
+		mCursor.moveToFirst();
+		do
+		{
+			ret = mCursor.getInt(0);
+		}while (mCursor.moveToNext());
+		db.close();
+		mCursor.close();
+		return ret;
+	}
+	
+	public int getWaterState(int id)
+	{
+		SQLiteDatabase db = getReadableDatabase();
+		String sql="select WATER from LIGHTS where id = "+id;
+		int ret = 0;
+		Cursor mCursor = db.rawQuery(sql, null);
+		mCursor.moveToFirst();
+		do
+		{
+			ret = mCursor.getInt(0);
+		}while (mCursor.moveToNext());
+		db.close();
+		mCursor.close();
+		return ret;
+	}
+	
+	public int getJumpState(int id)
+	{
+		SQLiteDatabase db = getReadableDatabase();
+		String sql="select JUMP from LIGHTS where id = "+id;
+		int ret = 0;
+		Cursor mCursor = db.rawQuery(sql, null);
+		mCursor.moveToFirst();
+		do
+		{
+			ret = mCursor.getInt(0);
+		}while (mCursor.moveToNext());
+		db.close();
+		mCursor.close();
+		return ret;
+	}
+	
+	public int getNightLampState(int id)
+	{
+		SQLiteDatabase db = getReadableDatabase();
+		String sql="select NIGHTLAMPSTATE from LIGHTS where id = "+id;
+		int ret = 0;
+		Cursor mCursor = db.rawQuery(sql, null);
+		mCursor.moveToFirst();
+		do
+		{
+			ret = mCursor.getInt(0);
+		}while (mCursor.moveToNext());
+		db.close();
+		mCursor.close();
+		return ret;
+	}
+	
+	public int getFlash(int id)
+	{
+		SQLiteDatabase db = getReadableDatabase();
+		String sql="select FLASH from LIGHTS where id = "+id;
+		int ret = 0;
+		Cursor mCursor = db.rawQuery(sql, null);
+		mCursor.moveToFirst();
+		do
+		{
+			ret = mCursor.getInt(0);
+		}while (mCursor.moveToNext());
+		db.close();
+		mCursor.close();
+		return ret;
+	}
+	
+	public int getLedState(int id)
+	{
+		SQLiteDatabase db = getReadableDatabase();
+		String sql="select LEDSTATE from LIGHTS where id = "+id;
+		int ret = 0;
+		Cursor mCursor = db.rawQuery(sql, null);
+		mCursor.moveToFirst();
+		do
+		{
+			ret = mCursor.getInt(0);
+		}while (mCursor.moveToNext());
+		db.close();
+		mCursor.close();
+		return ret;
+	}
+	
+	public void UpdateTimeOn(String time, int id)
+	{
+		SQLiteDatabase db = getWritableDatabase();
+		String sql ="update lights set TIMEON = \"" + time + "\" where id = " + id;
+		db.execSQL(sql);
+		db.close();
+	}
+	
+	public void UpdateDelayTime(String time, int id)
+	{
+		
+		SQLiteDatabase db = getWritableDatabase();
+		String sql ="update lights set DELAY = \"" + time + "\" where id = " + id;
+		db.execSQL(sql);
+		db.close();
+	}
+	
+	public void setJumpOff(int id)
+	{
+		
+		SQLiteDatabase db = getWritableDatabase();
+		String sql ="update lights set JUMP = " + 0 + " where id = " + id;
+		db.execSQL(sql);
+		db.close();
+	}
+	public void setWaterOff(int id)
+	{
+		
+		SQLiteDatabase db = getWritableDatabase();
+		String sql ="update lights set WATER = " + 0 + " where id = " + id;
+		db.execSQL(sql);
+		db.close();
+	}
+	public void setTouchOff(int id)
+	{
+		
+		SQLiteDatabase db = getWritableDatabase();
+		String sql ="update lights set TOUCH = " + 0 + " where id = " + id;
+		db.execSQL(sql);
+		db.close();
+	}
+	public void setGflashOff(int id)
+	{
+		
+		SQLiteDatabase db = getWritableDatabase();
+		String sql ="update lights set GFLASH = " + 0 + " where id = " + id;
+		db.execSQL(sql);
+		db.close();
+	}
+	public void setBflashOff(int id)
+	{
+		
+		SQLiteDatabase db = getWritableDatabase();
+		String sql ="update lights set BFLASH = " + 0 + " where id = " + id;
+		db.execSQL(sql);
+		db.close();
+	}
+	public void setWarmingOff(int id)
+	{
+		
+		SQLiteDatabase db = getWritableDatabase();
+		String sql ="update lights set WARMING = " + 0 + " where id = " + id;
+		db.execSQL(sql);
+		db.close();
+	}
+	
+	public void setJumpOn(int id)
+	{
+		
+		SQLiteDatabase db = getWritableDatabase();
+		String sql ="update lights set JUMP = 1, WATER = 0,"+
+					"TOUCH = 0, GFLIASH = 0, BFLASH = 0, WARMING = 0" + " where id = " + id;
+		db.execSQL(sql);
+		db.close();
+	}
+	public void setWaterOn(int id)
+	{
+		
+		SQLiteDatabase db = getWritableDatabase();
+		String sql ="update lights set JUMP = 0, WATER = 1,"+
+					"TOUCH = 0, GFLIASH = 0, BFLASH = 0, WARMING = 0" + " where id = " + id;
+		db.execSQL(sql);
+		db.close();
+	}
+	public void setTouchOn(int id)
+	{
+		
+		SQLiteDatabase db = getWritableDatabase();
+		String sql ="update lights set JUMP = 0, WATER = 0,"+
+					"TOUCH = 1, GFLIASH = 0, BFLASH = 0, WARMING = 0" + " where id = " + id;
+		db.execSQL(sql);
+		db.close();
+	}
+	public void setGflashOn(int id)
+	{
+		
+		SQLiteDatabase db = getWritableDatabase();
+		String sql ="update lights set JUMP = 0, WATER = 0,"+
+					"TOUCH = 0, GFLIASH = 1, BFLASH = 0, WARMING = 0" + " where id = " + id;
+		db.execSQL(sql);
+		db.close();
+	}
+	public void setBflashOn(int id)
+	{
+		
+		SQLiteDatabase db = getWritableDatabase();
+		String sql ="update lights set JUMP = 0, WATER = 0,"+
+					"TOUCH = 0, GFLIASH = 0, BFLASH = 1, WARMING = 0" + " where id = " + id;
+		db.execSQL(sql);
+		db.close();
+	}
+	public void setWarmingOn(int id)
+	{
+		
+		SQLiteDatabase db = getWritableDatabase();
+		String sql ="update lights set JUMP = 0, WATER = 0,"+
+					"TOUCH = 0, GFLIASH = 0, BFLASH = 0, WARMING = 1" + " where id = " + id;
+		db.execSQL(sql);
+		db.close();
+	}
+	
+	public void UpdateTimeOff(String time, int id)
+	{
+		
+		SQLiteDatabase db = getWritableDatabase();
+		String sql ="update lights set TOMEOFF = \"" + time + "\" where id = " + id;
+		db.execSQL(sql);
+		db.close();
+	}
+	
 	public void UpdateLedState(int state, int id)
 	{
 		SQLiteDatabase db = getWritableDatabase();
 		String sql ="update lights set LEDSTATE = "+state+" where id = " + id;
-		System.out.println("sql=" + sql);
+		db.execSQL(sql);
+		db.close();
+	}
+	
+	public void UpdateNightLampsState(int state, int id)
+	{
+		SQLiteDatabase db = getWritableDatabase();
+		String sql ="update lights set NIGHTLAMPSTATE = "+state+" where id = " + id;
 		db.execSQL(sql);
 		db.close();
 	}

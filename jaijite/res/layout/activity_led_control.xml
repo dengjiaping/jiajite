@@ -87,7 +87,8 @@
                     android:clickable="true"
                     android:gravity="center"
                     android:text="@string/ledNightlight"
-                    android:textColor="@drawable/led_text_selector" />
+                    android:textColor="@drawable/led_text_selector"
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <!-- 分组选择 -->
@@ -203,7 +204,7 @@
                     android:layout_height="50dp"
                     android:gravity="left|center_vertical"
                     android:paddingLeft="15dip"
-                    android:text="定时开灯：18:30" />
+                    android:text="定时开灯：18时30分" />
 
                 <FrameLayout
                     android:id="@+id/timingopenset"
@@ -233,7 +234,7 @@
                     android:layout_height="50dp"
                     android:gravity="left|center_vertical"
                     android:paddingLeft="15dip"
-                    android:text="定时关灯：18:30" />
+                    android:text="定时关灯：18时30分" />
 
                 <FrameLayout
                     android:id="@+id/timingcloseset"

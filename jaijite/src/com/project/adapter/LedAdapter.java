@@ -106,18 +106,18 @@ public class LedAdapter extends BaseAdapter
 		@Override
 		public void onClick(View arg0)
 		{
-			Task task = new Task();
+			Task task = new Task(context);
 			if (light.getLed_state() == Info.LED_ON) 
 			{
 				task.setId(light.getId());
 				task.setFunction(Info.TURN_OFF);
-				task.setAttribute(Info.LIGHT_PER);
+				task.setAttribute(Info.LIGHT_PER+"");
 			}
 			else 
 			{
 				task.setId(light.getId());
 				task.setFunction(Info.TURN_ON);
-				task.setAttribute(Info.LIGHT_PER);
+				task.setAttribute(Info.LIGHT_PER+"");
 			}
 		
 			MainService.newTask(task);

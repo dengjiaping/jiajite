@@ -1,22 +1,29 @@
 package com.project.bean;
 
+import android.app.Activity;
+import android.content.Context;
+
 
 public class Task
 {
-	
+	private Context context = null;
 	private String command;
 	private int id;
 	private String head = "LED:";
 	private String mac = "E005C54DF500";
 	private int function;
-	private int attribute;
+	private String attribute;
 	
 	private String new_paswd;
 	private String old_paswd;
 	
-	public Task()
+	public Task(Context context)
 	{
-
+		this.context = context;
+	}
+	
+	public Context getContext() {
+		return context;
 	}
 	
 	public String getNew_paswd() {
@@ -69,11 +76,11 @@ public class Task
 		this.function = function;
 	}
 
-	public int getAttribute() {
+	public String getAttribute() {
 		return attribute;
 	}
 
-	public void setAttribute(int attribute) {
+	public void setAttribute(String  attribute) {
 		this.attribute = attribute;
 	}
 

@@ -112,7 +112,7 @@ public class MainService extends Service implements Runnable
 		public void handleMessage(android.os.Message msg)
 		{
 			InterFace activity = null;
-			activity = (InterFace) getActivityByName("LedActivity");
+			activity = (InterFace) getActivityByName(((Task)msg.obj).getContext().getClass().getSimpleName());
 			if (activity != null)
 				activity.refresh(msg.obj);
 		}
